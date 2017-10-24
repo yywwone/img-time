@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			*{margin: 0;padding: 0;}
+			ul li{
+				list-style: none;
+				float: left;
+				overflow: hidden;
+				height: 172px;
+			}
+			.box{
+				margin: 20px auto;
+				transform: scale(0.5);
+			}
+			p{
+				width: 123px;
+				height: 342px;
+				position: relative;
+				top: 0;
+				left: 0;
+			}
+		</style>
+		<script type="text/javascript">
+		function getStyle(obj,attr){
+			return obj.currentStyle?obj.currentStyle[attr]:getComputedStyle(obj)[attr];
+		}
+		function doMove(obj,attr,speed,target,callBack){
+	if(obj.timer) return;
+	var num = parseFloat(getStyle( obj,attr )); 
+	speed = num > target ? -Math.abs(speed) : Math.abs(speed);
+	obj.timer = setInterval(function (){
+		num += speed;
+		if( speed > 0 && num >= target || speed < 0 && num <= target  ){
+			num = target;
+
+			clearInterval(obj.timer);
+			obj.timer = null; //设置保存定时器的的值为null
+			obj.style[attr] = num + "px";
+
+			(typeof callBack === "function") && callBack();
+
+		}else{
+			obj.style[attr] = num + "px";
+		}
+		
+
+	},50)	
+}
+		//--------------------------------------------------------
+			window.onload=function(){
+				var oList=document.getElementById("list");
+				var aP=oList.getElementsByTagName("p");
+				var prevTime="";
+				var timerStr;
+				timer();
+				setInterval(timer,1000)
+				function timer(){
+					for(var i=0;i<aP.length;i++){
+						fn(aP[i],i);
+					};
+					function addZreo(m){
+						if(m<10) return "0"+m;
+						else return m;
+					}
+					function fn(p,n){
+						var aImg=p.getElementsByTagName("img");
+						var d=new Date();
+						var h=d.getHours();
+						var m=d.getMinutes();
+						var s=d.getSeconds();
+						   timeStr=addZreo(h)+":"+addZreo(m)+":"+addZreo(s);
+						//console.log(timeStr);//13:57:20
+						if(timeStr.charAt(n)===":"){
+							aImg[0].src="img/colon.jpg";
+							setTimeout(function(){
+								aImg[0].src="img/none.jpg";
+							},500);
+						}else{
+							aImg[1].src="img/"+timeStr.charAt(n)+".jpg";
+							if(prevTime.charAt(n)!==timeStr.charAt(n)){
+								doMove(p,"top",10,-123,function(){
+									p.style.top=0;
+									aImg[0].src=aImg[1].src;
+								})
+							}
+						}
+						
+					}
+					prevTime=timeStr;
+				}
+			};
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<ul id="list">
+				<li>
+					<p>
+						<img src="img/0.jpg" alt="" />
+						<img src="img/0.jpg" alt="" />
+					</p>
+				</li>
+				<li>
+					<p>
+						<img src="img/0.jpg" alt="" />
+						<img src="img/0.jpg" alt="" />
+					</p>
+				</li>
+				<li>
+					<p><img src="img/colon.jpg" alt="" /></p>
+				</li>
+				<li>
+					<p>
+						<img src="img/0.jpg" alt="" />
+						<img src="img/0.jpg" alt="" />
+					</p>
+				</li>
+				<li>
+					<p>
+						<img src="img/0.jpg" alt="" />
+						<img src="img/0.jpg" alt="" />
+					</p>
+				</li>
+				<li>
+					<p><img src="img/colon.jpg" alt="" /></p>
+				</li>
+				<li>
+					<p>
+						<img src="img/0.jpg" alt="" />
+						<img src="img/0.jpg" alt="" />
+					</p>
+				</li>
+				<li>
+					<p>
+						<img src="img/0.jpg" alt="" />
+						<img src="img/0.jpg" alt="" />
+					</p>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
